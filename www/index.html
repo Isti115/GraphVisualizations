@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Graphs</title>
+  <link rel="stylesheet" type="text/css" href="styles.css">
+  <link rel="stylesheet" type="text/css" href="output.css">
+  <script type="text/javascript" src="graph.js"></script>
+  <script type="text/javascript" src="scripts.js"></script>
+</head>
+<body>
+  <div id="shareCodeContainer">
+    Paste this link into a browser to share it or bookmark it for future use:
+    <br>
+    <textarea id="shareCode">
+      
+    </textarea>
+  </div>
+  <div class="container">
+    <div id="author" class="about noselect">
+      Written by: Istvan Donko
+    </div>
+    
+    <div id="config">
+      <img id="configLogo" src="gear.png" />
+      <img id="configShare" src="share.png" />
+      
+      <table id="configTable">
+        <thead>
+          <tr><th>Parameter</th><th>Value</th></tr>
+        </thead>
+        <tr>
+          <td id="speedCounter">Speed (1):</td>
+          <td><input class="configInput" id="speedInput" type="range" min="1" max="10" value="1"></td>
+        </tr>
+      </table>
+      
+      <input id="exampleButton" type="button" value="Random graph" />
+      <br>
+      <input id="drawButton" type="button" value="Draw" />
+      <input id="processButton" type="button" value="Process" />
+    </div>
+    
+    <h1 class="noselect" id="title">Discrete Mathematics II - Graph Visualization</h1>
+    
+    <div id="output">
+      <svg id="outputGraphics"></svg>
+    </div>
+  </div>
+</body>
+</html>
