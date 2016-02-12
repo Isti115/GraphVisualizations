@@ -1,7 +1,14 @@
 circle {
   r: 10px;
+  
+  fill: rgba(255, 0, 0, 1);
+  stroke: black;
+  
+  cursor: move;
 }
 
 line {
   stroke: black;
+  
+  stroke-width: 2px;
 }
