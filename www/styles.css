@@ -81,7 +81,7 @@ h1 {
   
   font-size: 23px;
   
-  background-color: #7676ea;
+  background-color: #ea7676;
   
   border-radius: 10px;
   
@@ -166,6 +166,39 @@ h1 {
   border-width: 6px;
 }
 
+#tools {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  align-items: center;
+  
+  position: fixed;
+    top: 30px;
+    right: 30px;
+  
+  width: 250px;
+  height: 100px;
+  
+  overflow: hidden;
+  
+  padding: 15px;
+  
+  font-size: 23px;
+  
+  background-color: #7676ea;
+  
+  border-radius: 10px;
+  
+  box-shadow: #000000 4px 4px 10px;
+}
+
+#tools input {
+  width: 75px;
+  height: 45px;
+  
+  white-space: normal;
+}
+
 #output {
   position: fixed;
     top: 0px;
@@ -173,7 +206,7 @@ h1 {
     bottom: 0px;
     left: 0px;
   
-  cursor: crosshair;
+  /*cursor: crosshair;*/
   
   z-index: -1;
 }

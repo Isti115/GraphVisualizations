@@ -12,3 +12,7 @@ line {
   
   stroke-width: 2px;
 }
+
+text {
+  pointer-events: none;
+}

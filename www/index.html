@@ -4,6 +4,7 @@
   <title>Graphs</title>
   <link rel="stylesheet" type="text/css" href="styles.css">
   <link rel="stylesheet" type="text/css" href="output.css">
+  <script type="text/javascript" src="graphEditor.js"></script>
   <script type="text/javascript" src="graph.js"></script>
   <script type="text/javascript" src="scripts.js"></script>
 </head>
@@ -41,6 +42,16 @@
     </div>
     
     <h1 class="noselect" id="title">Discrete Mathematics II - Graph Visualization</h1>
+    
+    <div id="tools">
+      <input id="addVertexButton" type="button" value="Add Vertex" />
+      <input id="renameVertexButton" type="button" value="Rename Vertex" />
+      <input id="removeVertexButton" type="button" value="Remove Vertex" />
+      <!-- <br /> -->
+      <input id="addEdgeButton" type="button" value="Add Edge (->)" />
+      <input id="addSymmetricalEdgeButton" type="button" value="Add Edge (<->)" />
+      <input id="removeEdgeButton" type="button" value="Remove Edge" />
+    </div>
     
     <div id="output">
       <!-- <svg id="outputGraphics"></svg> -->

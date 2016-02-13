@@ -30,7 +30,6 @@ var speed = 1;
 var output, graphics;
 
 var graph;
-var verticePositions = {};
 
 function load() {
   graph = new Graph();
@@ -66,6 +65,7 @@ function load() {
   document.getElementById("shareCodeContainer").addEventListener("click", shareHide, false);
   
   output = document.getElementById("output");
+  output.addEventListener("mousedown", outputDown, false);
   
   graphics = document.createElementNS("http://www.w3.org/2000/svg", "svg");
   graphics.setAttribute("id", "outputGraphics");
@@ -77,6 +77,8 @@ function load() {
   for (var i = 0; i < configInputs.length; i++) {
     configInputs[i].addEventListener("change", configUpdate, false);
   }
+  
+  graphEditor_load();
 }
 
 function share() {
@@ -104,76 +106,6 @@ function example() {
   currentExample = random;
   
   configUpdate();
-}
-
-var grabbedVertexName = "";
-
-function grabStart(e) {
-  grabbedVertexName = graph.vertices[parseInt(e.srcElement.getAttribute("id"))].name;
-  
-  graphics.addEventListener("mousemove", grabMove, false);
-  graphics.addEventListener("mouseup", grabEnd, false);
-}
-
-function grabMove(e) {
-  verticePositions[grabbedVertexName] = {
-    x: e.clientX,
-    y: e.clientY
-  };
-  draw();
-}
-
-function grabEnd(e) {
-  graphics.removeEventListener("mousemove", grabMove, false);
-  graphics.removeEventListener("mouseup", grabEnd, false);
-}
-
-function draw() {
-  while (graphics.firstChild) {
-    graphics.removeChild(graphics.firstChild);
-  }
-  
-  for (var currentVertex of graph.vertices) {
-    if (!(currentVertex.name in verticePositions)) {  
-      var cx = Math.random() * graphics.clientWidth;
-      var cy = Math.random() * graphics.clientHeight;
-      verticePositions[currentVertex.name] = {x: cx, y:cy};
-    }
-  }
-  
-  for (var currentEdge of graph.edges) {
-    var currentEdgeLine = document.createElementNS(svgNS, "line");
-    
-    currentEdgeLine.setAttributeNS(null, "id", graph.edges.indexOf(currentEdge));
-    
-    currentEdgeLine.setAttributeNS(null, "x1", verticePositions[currentEdge.vertices[0].name].x);
-    currentEdgeLine.setAttributeNS(null, "y1", verticePositions[currentEdge.vertices[0].name].y);
-    
-    currentEdgeLine.setAttributeNS(null, "x2", verticePositions[currentEdge.vertices[1].name].x);
-    currentEdgeLine.setAttributeNS(null, "y2", verticePositions[currentEdge.vertices[1].name].y);
-    
-    graphics.appendChild(currentEdgeLine);
-  }
-  
-  for (var currentVertex of graph.vertices) {
-    // var currentVertexGroup = document.createElementNS(svgNS, "g");
-    
-    var currentVertexCircle = document.createElementNS(svgNS, "circle");
-    
-    currentVertexCircle.setAttributeNS(null, "id", graph.vertices.indexOf(currentVertex));
-    
-    // currentVertexCircle.setAttributeNS(null, "r", 10);
-    
-    currentVertexCircle.setAttributeNS(null, "cx", verticePositions[currentVertex.name].x);
-    currentVertexCircle.setAttributeNS(null, "cy", verticePositions[currentVertex.name].y);
-    
-    currentVertexCircle.addEventListener("mousedown", grabStart, false);
-    
-    graphics.appendChild(currentVertexCircle);
-    
-    // currentVertexGroup.appendChild(currentVertexCircle);
-    // graphics.appendChild(currentVertexGroup);
-  }
 }
 
 function process() {
