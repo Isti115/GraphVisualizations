@@ -3,9 +3,13 @@ circle {
   
   fill: rgba(255, 0, 0, 1);
   stroke: black;
-  
-  cursor: move;
 }
+
+#output[operation="dragVertex"]   circle { cursor: move; }
+#output[operation="addVertex"]    circle { cursor: crosshair; }
+#output[operation="renameVertex"] circle { cursor: text; }
+#output[operation="addEdge1"]     circle { cursor: pointer; }
+#output[operation="addEdge2"]     circle { cursor: alias; }
 
 line {
   stroke: black;

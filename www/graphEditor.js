@@ -4,15 +4,15 @@ function graphEditor_load() {
   document.getElementById("drawButton").addEventListener("click", draw, false);
   document.getElementById("addVertexButton").addEventListener("click", function () {
     operation = "addVertex";
-    output.style.cursor = "crosshair";
+    output.setAttribute("operation", "addVertex");
   }, false);
   document.getElementById("renameVertexButton").addEventListener("click", function () {
     operation = "renameVertex";
-    output.style.cursor = "text";
+    output.setAttribute("operation", "renameVertex");
   }, false);
   document.getElementById("addEdgeButton").addEventListener("click", function () {
     operation = "addEdge";
-    output.style.cursor = "pointer";
+    output.setAttribute("operation", "addEdge1");
   }, false);
 }
 
@@ -71,7 +71,7 @@ function vertexDown(e) {
     
     currentVertex.name = newName;
     
-    output.style.cursor = "default";
+    output.setAttribute("operation", "dragVertex");
     operation = "dragVertex";
     
     draw();
@@ -87,7 +87,7 @@ function vertexDown(e) {
       y: e.clientY
     };
     
-    output.style.cursor = "default";
+    output.setAttribute("operation", "dragVertex");
     operation = "dragVertex";
     
     draw();
@@ -98,14 +98,14 @@ function vertexDown(e) {
   function addEdge(e) {
     addEdgeVertices.push(graph.vertices[parseInt(e.srcElement.getAttribute("id"))].name);
     
-    output.style.cursor = "alias";
+    output.setAttribute("operation", "addEdge2");
     
     if (addEdgeVertices.length == 2) {
       graph.addEdge(...addEdgeVertices);
       
       addEdgeVertices = [];
       
-      output.style.cursor = "default";
+      output.setAttribute("operation", "dragVertex");
       operation = "dragVertex";
       
       draw();
@@ -174,4 +174,6 @@ function draw() {
     
     graphics.appendChild(currentVertexLabel);
   }
+  
+  output.setAttribute("operation", "dragVertex");
 }
