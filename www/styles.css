@@ -197,6 +197,8 @@ h1 {
   height: 45px;
   
   white-space: normal;
+  
+  font-family: Consolas;
 }
 
 #output {

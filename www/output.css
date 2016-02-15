@@ -5,9 +5,14 @@ circle {
   stroke: black;
 }
 
+circle:active {
+  r: 12.5px;
+}
+
 #output[operation="dragVertex"]   circle { cursor: move; }
-#output[operation="addVertex"]    circle { cursor: crosshair; }
+#output[operation="addVertex"]           { cursor: crosshair; }
 #output[operation="renameVertex"] circle { cursor: text; }
+#output[operation="removeVertex"] circle { cursor: not-allowed; }
 #output[operation="addEdge1"]     circle { cursor: pointer; }
 #output[operation="addEdge2"]     circle { cursor: alias; }
 

@@ -1,23 +1,34 @@
 var vertexNames = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q",  "R", "S", "T", "U", "V", "W", "X", "Y", "Z", ];
 
 function graphEditor_load() {
-  document.getElementById("drawButton").addEventListener("click", draw, false);
   document.getElementById("addVertexButton").addEventListener("click", function () {
     operation = "addVertex";
     output.setAttribute("operation", "addVertex");
   }, false);
+  
   document.getElementById("renameVertexButton").addEventListener("click", function () {
     operation = "renameVertex";
     output.setAttribute("operation", "renameVertex");
   }, false);
+  
+  document.getElementById("removeVertexButton").addEventListener("click", function () {
+    operation = "removeVertex";
+    output.setAttribute("operation", "removeVertex");
+  }, false);
+  
   document.getElementById("addEdgeButton").addEventListener("click", function () {
     operation = "addEdge";
+    output.setAttribute("operation", "addEdge1");
+  }, false);
+  
+  document.getElementById("addSymmetricalEdgeButton").addEventListener("click", function () {
+    operation = "addSymmetricalEdge";
     output.setAttribute("operation", "addEdge1");
   }, false);
 }
 
 var operation = "dragVertex";
-var verticePositions = {};
+var vertexPositions = {};
 
 function outputDown(e) {
   if (operation == "addVertex") {
@@ -30,8 +41,12 @@ function vertexDown(e) {
     dragVertexStart(e);
   } else if (operation == "renameVertex") {
     renameVertex(e);
+  } else if (operation == "removeVertex") {
+    removeVertex(e);
   } else if (operation == "addEdge") {
     addEdge(e);
+  } else if (operation == "addSymmetricalEdge") {
+    addSymmetricalEdge(e);
   }
 }
 
@@ -45,11 +60,11 @@ function vertexDown(e) {
   }
 
   function dragVertexMove(e) {
-    verticePositions[draggedVertexName] = {
+    vertexPositions[draggedVertexName] = {
       x: e.clientX,
       y: e.clientY
     };
-    draw();
+    reDraw();
   }
 
   function dragVertexEnd(e) {
@@ -58,23 +73,7 @@ function vertexDown(e) {
     
     draggedVertexName = "";
     
-    draw();
-  }
-
-"REGION: renameVertex";
-  function renameVertex(e) {
-    var currentVertex = graph.vertices[parseInt(e.srcElement.getAttribute("id"))];
-    var newName = prompt("New name:");
-    
-    verticePositions[newName] = verticePositions[currentVertex.name];
-    delete verticePositions[currentVertex.name];
-    
-    currentVertex.name = newName;
-    
-    output.setAttribute("operation", "dragVertex");
-    operation = "dragVertex";
-    
-    draw();
+    reDraw();
   }
 
 "REGION: addVertex";
@@ -82,7 +81,7 @@ function vertexDown(e) {
     var currentVertexName = vertexNames.pop();
     graph.addVertex(currentVertexName);
     
-    verticePositions[currentVertexName] = {
+    vertexPositions[currentVertexName] = {
       x: e.clientX,
       y: e.clientY
     };
@@ -90,7 +89,38 @@ function vertexDown(e) {
     output.setAttribute("operation", "dragVertex");
     operation = "dragVertex";
     
-    draw();
+    reDraw();
+  }
+
+"REGION: renameVertex";
+  function renameVertex(e) {
+    var currentVertex = graph.vertices[parseInt(e.srcElement.getAttribute("id"))];
+    var newName = prompt("New name:");
+    
+    vertexPositions[newName] = vertexPositions[currentVertex.name];
+    delete vertexPositions[currentVertex.name];
+    
+    currentVertex.name = newName;
+    
+    output.setAttribute("operation", "dragVertex");
+    operation = "dragVertex";
+    
+    reDraw();
+  }
+
+"REGION: removeVertex";
+  function removeVertex(e) {
+    var currentVertex = graph.vertices[parseInt(e.srcElement.getAttribute("id"))];
+    
+    vertexNames.push(currentVertex.name);
+    delete vertexPositions[currentVertex.name];
+    
+    graph.removeVertex(currentVertex);
+    
+    output.setAttribute("operation", "dragVertex");
+    operation = "dragVertex";
+    
+    reDraw();
   }
 
 "REGION: addEdge";
@@ -108,20 +138,39 @@ function vertexDown(e) {
       output.setAttribute("operation", "dragVertex");
       operation = "dragVertex";
       
-      draw();
+      reDraw();
     }
   }
 
-function draw() {
+"REGION: addSymmetricalEdge";
+  var addEdgeVertices = [];
+  function addSymmetricalEdge(e) {
+    addEdgeVertices.push(graph.vertices[parseInt(e.srcElement.getAttribute("id"))].name);
+    
+    output.setAttribute("operation", "addEdge2");
+    
+    if (addEdgeVertices.length == 2) {
+      graph.addEdge(...addEdgeVertices, true);
+      
+      addEdgeVertices = [];
+      
+      output.setAttribute("operation", "dragVertex");
+      operation = "dragVertex";
+      
+      reDraw();
+    }
+  }
+
+function reDraw() {
   while (graphics.firstChild) {
     graphics.removeChild(graphics.firstChild);
   }
   
   for (var currentVertex of graph.vertices) {
-    if (!(currentVertex.name in verticePositions)) {
-      var cx = Math.random() * graphics.clientWidth;
-      var cy = Math.random() * (graphics.clientHeight - 150) + 150;
-      verticePositions[currentVertex.name] = {x: cx, y:cy};
+    if (!(currentVertex.name in vertexPositions)) {
+      var cx = Math.floor(Math.random() * graphics.clientWidth);
+      var cy = Math.floor(Math.random() * (graphics.clientHeight - 150) + 150);
+      vertexPositions[currentVertex.name] = {x: cx, y:cy};
     }
   }
   
@@ -130,11 +179,11 @@ function draw() {
     
     currentEdgeLine.setAttribute("id", graph.edges.indexOf(currentEdge));
     
-    currentEdgeLine.setAttributeNS(null, "x1", verticePositions[currentEdge.vertices[0].name].x);
-    currentEdgeLine.setAttributeNS(null, "y1", verticePositions[currentEdge.vertices[0].name].y);
+    currentEdgeLine.setAttributeNS(null, "x1", vertexPositions[currentEdge.vertices[0].name].x);
+    currentEdgeLine.setAttributeNS(null, "y1", vertexPositions[currentEdge.vertices[0].name].y);
     
-    currentEdgeLine.setAttributeNS(null, "x2", verticePositions[currentEdge.vertices[1].name].x);
-    currentEdgeLine.setAttributeNS(null, "y2", verticePositions[currentEdge.vertices[1].name].y);
+    currentEdgeLine.setAttributeNS(null, "x2", vertexPositions[currentEdge.vertices[1].name].x);
+    currentEdgeLine.setAttributeNS(null, "y2", vertexPositions[currentEdge.vertices[1].name].y);
     
     graphics.appendChild(currentEdgeLine);
   }
@@ -150,8 +199,8 @@ function draw() {
       currentVertexCircle.style.r = 12.5;
     }
     
-    currentVertexCircle.setAttributeNS(null, "cx", verticePositions[currentVertex.name].x);
-    currentVertexCircle.setAttributeNS(null, "cy", verticePositions[currentVertex.name].y);
+    currentVertexCircle.setAttributeNS(null, "cx", vertexPositions[currentVertex.name].x);
+    currentVertexCircle.setAttributeNS(null, "cy", vertexPositions[currentVertex.name].y);
     
     currentVertexCircle.addEventListener("mousedown", vertexDown, false);
     
@@ -165,8 +214,8 @@ function draw() {
     
     currentVertexLabel.setAttributeNS(null, "id", graph.vertices.indexOf(currentVertex));
     
-    currentVertexLabel.setAttributeNS(null, "x", verticePositions[currentVertex.name].x - 5);
-    currentVertexLabel.setAttributeNS(null, "y", verticePositions[currentVertex.name].y + 5);
+    currentVertexLabel.setAttributeNS(null, "x", vertexPositions[currentVertex.name].x - 5);
+    currentVertexLabel.setAttributeNS(null, "y", vertexPositions[currentVertex.name].y + 5);
     
     var currentVertexLabelText = document.createTextNode(currentVertex.name);
     currentVertexLabel.classList.add("noselect");
@@ -176,4 +225,8 @@ function draw() {
   }
   
   output.setAttribute("operation", "dragVertex");
+}
+
+function updateDraw() {
+  
 }

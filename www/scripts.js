@@ -58,7 +58,7 @@ function load() {
     location.reload();
   }, false);
   
-  document.getElementById("drawButton").addEventListener("click", draw, false);
+  document.getElementById("drawButton").addEventListener("click", reDraw, false);
   document.getElementById("processButton").addEventListener("click", process, false);
   document.getElementById("exampleButton").addEventListener("click", example, false);
   document.getElementById("configShare").addEventListener("click", share, false);
