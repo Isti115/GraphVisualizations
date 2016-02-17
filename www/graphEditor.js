@@ -229,7 +229,7 @@ function reDraw() {
   output.setAttribute("operation", "dragVertex");
 }
 
-var groupColors = ["blue", "white", "green", "red"];
+var groupColors = ["blue", "white", "green", "yellow", "magenta", "red"];
 
 function updateDraw() {
   for (var currentEdge of graph.edges) {
@@ -237,6 +237,8 @@ function updateDraw() {
     
     if (currentEdge.group != undefined) {
       currentEdgeLine.style.stroke = groupColors[currentEdge.group];
+    } else {
+      currentEdgeLine.style.stroke = "";
     }
     
     if (currentEdge.selected) {
@@ -260,6 +262,8 @@ function updateDraw() {
     
     if (currentVertex.group != undefined) {
       currentVertexCircle.style.fill = groupColors[currentVertex.group];
+    } else {
+      currentVertexCircle.style.fill = "";
     }
     
     var currentVertexLabel = document.querySelector("text[id='" + graph.vertices.indexOf(currentVertex) + "'");

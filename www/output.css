@@ -1,7 +1,7 @@
 circle {
   r: 10px;
   
-  fill: rgba(255, 0, 0, 1);
+  fill: rgba(255, 0, 0, 0.5);
   stroke: black;
   
   transition: r 0.5s, fill 1s;

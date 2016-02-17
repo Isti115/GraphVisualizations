@@ -6,26 +6,34 @@ window.addEventListener("load", load, false);
 
 var examples = [
   {
-    vertices: [
-      
-    ],
-    edges: [
-      
-    ]
+    "A":["B","D"],
+    "B":["A","D"],
+    "C":["B"],
+    "D":[]
   },
   {
-    vertices: [
-      
-    ],
-    edges: [
-      
-    ]
+    "A":["B","D"],
+    "B":["A","D","Z"],
+    "C":["B"],
+    "D":[],
+    "Z":["B"],
+    "Y":["Z"],
+    "X":["W"],
+    "W":[],
+    "V":["X"]
+  },
+  {
+    "Budapest":["Madrid","London"],
+    "Chicago":["New York"],
+    "London":["Budapest","Madrid","New York"],
+    "Madrid":["New York"],
+    "New York":["Chicago", "Madrid", "London"]
   }
 ];
 
 var currentExample = -1;
 
-var speed = 1;
+var speed = 5;
 
 var output, graphics;
 
@@ -62,7 +70,9 @@ function load() {
   document.getElementById("processButton").addEventListener("click", process, false);
   document.getElementById("exampleButton").addEventListener("click", example, false);
   document.getElementById("configShare").addEventListener("click", share, false);
-  document.getElementById("shareCodeContainer").addEventListener("click", shareHide, false);
+  document.getElementById("importButton").addEventListener("click", importFromText, false);
+  document.getElementById("closeButton").addEventListener("click", shareHide, false);
+  // document.getElementById("shareCodeContainer").addEventListener("click", shareHide, false);
   
   output = document.getElementById("output");
   output.addEventListener("mousedown", outputDown, false);
@@ -79,11 +89,41 @@ function load() {
   }
   
   graphEditor_load();
+  reDraw();
+}
+
+function exportGraph() {
+  var output = {};
+  for (var currentVertex of graph.vertices) {
+      output[currentVertex.name] = currentVertex.edges.out.map(e => e.vertices[1].name);
+  }
+  return output;
+}
+
+function importGraph(input) {
+  graph = new Graph();
+  for (var vertex in input) {
+    graph.addVertex(vertex);
+  }
+  for (var vertex in input) {
+    console.log(input[vertex]);
+    for (var edge of input[vertex]) {
+      console.log(edge);
+      graph.addEdge(vertex, edge);
+    }
+  }
 }
 
 function share() {
-  document.getElementById("shareCode").innerHTML = location.href;
+  document.getElementById("exportCode").innerHTML = JSON.stringify(exportGraph());
   document.getElementById("shareCodeContainer").style.top = "100px";
+}
+
+function importFromText() {
+  var dataText = document.getElementById("importCode").innerHTML;
+  console.log(dataText);
+  importGraph(JSON.parse(dataText));
+  reDraw();
 }
 
 function shareHide() {
@@ -105,12 +145,15 @@ function example() {
   
   currentExample = random;
   
+  importGraph(examples[currentExample]);
+  reDraw();
+  
   configUpdate();
 }
 
 var processData;
 var processQueue = [];
-var stepDelay = 250;
+var stepDelay = 350;
 
 function step() {
   if (processQueue.length == 0) {
@@ -176,6 +219,7 @@ function resetGroups() {
 }
 
 function process() {
+  stepDelay = speed * 100;
   processData = {currentGroup: -1, processed: {vertices: [], edges: []}};
   resetGroups();
   processQueue.push({type: "newGroup"});
