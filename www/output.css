@@ -3,6 +3,8 @@ circle {
   
   fill: rgba(255, 0, 0, 1);
   stroke: black;
+  
+  transition: r 0.5s, fill 1s;
 }
 
 circle:active {
@@ -17,9 +19,11 @@ circle:active {
 #output[operation="addEdge2"]     circle { cursor: alias; }
 
 line {
+  stroke-width: 3px;
+  
   stroke: black;
   
-  stroke-width: 2px;
+  transition: stroke-width 1s, stroke 1s;
 }
 
 text {

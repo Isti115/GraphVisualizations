@@ -169,7 +169,8 @@ function reDraw() {
   for (var currentVertex of graph.vertices) {
     if (!(currentVertex.name in vertexPositions)) {
       var cx = Math.floor(Math.random() * graphics.clientWidth);
-      var cy = Math.floor(Math.random() * (graphics.clientHeight - 150) + 150);
+      var paddingTop = 200;
+      var cy = Math.floor(Math.random() * (graphics.clientHeight - paddingTop) + paddingTop);
       vertexPositions[currentVertex.name] = {x: cx, y:cy};
     }
   }
@@ -224,9 +225,46 @@ function reDraw() {
     graphics.appendChild(currentVertexLabel);
   }
   
+  updateDraw();
   output.setAttribute("operation", "dragVertex");
 }
 
+var groupColors = ["blue", "white", "green", "red"];
+
 function updateDraw() {
+  for (var currentEdge of graph.edges) {
+    var currentEdgeLine = document.querySelector("line[id='" + graph.edges.indexOf(currentEdge) + "'");
+    
+    if (currentEdge.group != undefined) {
+      currentEdgeLine.style.stroke = groupColors[currentEdge.group];
+    }
+    
+    if (currentEdge.selected) {
+      currentEdgeLine.style.strokeWidth = "7px";
+    } else {
+      currentEdgeLine.style.strokeWidth = "";
+    }
+    
+    currentEdgeLine.setAttributeNS(null, "x1", vertexPositions[currentEdge.vertices[0].name].x);
+    currentEdgeLine.setAttributeNS(null, "y1", vertexPositions[currentEdge.vertices[0].name].y);
+    
+    currentEdgeLine.setAttributeNS(null, "x2", vertexPositions[currentEdge.vertices[1].name].x);
+    currentEdgeLine.setAttributeNS(null, "y2", vertexPositions[currentEdge.vertices[1].name].y);
+  }
   
+  for (var currentVertex of graph.vertices) {
+    var currentVertexCircle = document.querySelector("circle[id='" + graph.vertices.indexOf(currentVertex) + "'");
+    
+    currentVertexCircle.setAttributeNS(null, "cx", vertexPositions[currentVertex.name].x);
+    currentVertexCircle.setAttributeNS(null, "cy", vertexPositions[currentVertex.name].y);
+    
+    if (currentVertex.group != undefined) {
+      currentVertexCircle.style.fill = groupColors[currentVertex.group];
+    }
+    
+    var currentVertexLabel = document.querySelector("text[id='" + graph.vertices.indexOf(currentVertex) + "'");
+    
+    currentVertexLabel.setAttributeNS(null, "x", vertexPositions[currentVertex.name].x - 5);
+    currentVertexLabel.setAttributeNS(null, "y", vertexPositions[currentVertex.name].y + 5);
+  }
 }
