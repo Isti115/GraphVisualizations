@@ -1,3 +1,14 @@
+#markerDefinition {
+  /*display: none;*/
+  
+  position: fixed;
+    top: 0px;
+    left: 0px;
+  
+  width: 0px;
+  height: 0px;
+}
+
 circle {
   r: 10px;
   
@@ -22,6 +33,7 @@ line {
   stroke-width: 3px;
   
   stroke: black;
+  marker-end: url(#Triangle);
   
   transition: stroke-width 1s, stroke 1s;
 }

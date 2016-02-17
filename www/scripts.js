@@ -28,6 +28,19 @@ var examples = [
     "London":["Budapest","Madrid","New York"],
     "Madrid":["New York"],
     "New York":["Chicago", "Madrid", "London"]
+  },
+  {
+    "A":["B","D"],
+    "B":["A","D"],
+    "C":["B","W"],
+    "D":["V"],
+    "Z":["Y","X"],
+    "Y":["Z"],
+    "X":["V"],
+    "W":["T"],
+    "V":["X","D","U"],
+    "U":["W","V"],
+    "T":["U"]
   }
 ];
 

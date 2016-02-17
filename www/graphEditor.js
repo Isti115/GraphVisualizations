@@ -242,7 +242,7 @@ function updateDraw() {
     }
     
     if (currentEdge.selected) {
-      currentEdgeLine.style.strokeWidth = "7px";
+      currentEdgeLine.style.strokeWidth = "5px";
     } else {
       currentEdgeLine.style.strokeWidth = "";
     }
