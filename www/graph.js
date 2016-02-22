@@ -50,10 +50,20 @@ class Graph {
   }
   
   addEdge(v1Name, v2Name, symmetrical) {
+    if (this.edges.filter(e => e.vertices[0].name == v1Name && e.vertices[1].name == v2Name).length > 0) {
+      console.log("edge alredy exists");
+      return;
+    }
+    
     var e1 = new Edge(...this.vertices.filter(v => v.name == v1Name), ...this.vertices.filter(v => v.name == v2Name));
     this.edges.push(e1);
     
-    if (symmetrical) {
+    var reverseEdges = this.edges.filter(e => e.vertices[1].name == v1Name && e.vertices[0].name == v2Name);
+    
+    if (reverseEdges.length > 0) {
+      reverseEdges[0].pair = e1;
+      e1.pair = reverseEdges[0];
+    } else if (symmetrical) {
       var e2 = new Edge(...this.vertices.filter(v => v.name == v2Name), ...this.vertices.filter(v => v.name == v1Name));
       this.edges.push(e2);
       
@@ -63,6 +73,6 @@ class Graph {
   }
   
   removeEdge(edge) {
-    
+    this.edges.splice(this.edges.indexOf(edge), 1);
   }
 }

@@ -41,6 +41,28 @@ var examples = [
     "V":["X","D","U"],
     "U":["W","V"],
     "T":["U"]
+  },
+  {
+    "A":["B","D"],
+    "B":["A","D"],
+    "C":["B"],
+    "D":[],
+    "Z":[],
+    "Y":[],
+    "X":["Y"],
+    "W":["V"],
+    "V":[],
+    "U":["Z"],
+    "T":["S"],
+    "S":["T"],
+    "R":[],
+    "Q":["R","P"],
+    "P":["Q"],
+    "O":["N"],
+    "N":["M","O"],
+    "M":["N"],
+    "L":[],
+    "K":["L"]
   }
 ];
 
@@ -88,7 +110,8 @@ function load() {
   // document.getElementById("shareCodeContainer").addEventListener("click", shareHide, false);
   
   output = document.getElementById("output");
-  output.addEventListener("mousedown", outputDown, false);
+  output.addEventListener("mousedown", outputMouseDown, false);
+  document.body.addEventListener("keydown", outputKeyDown, false);
   
   graphics = document.createElementNS("http://www.w3.org/2000/svg", "svg");
   graphics.setAttribute("id", "outputGraphics");
@@ -119,9 +142,7 @@ function importGraph(input) {
     graph.addVertex(vertex);
   }
   for (var vertex in input) {
-    console.log(input[vertex]);
     for (var edge of input[vertex]) {
-      console.log(edge);
       graph.addEdge(vertex, edge);
     }
   }
@@ -134,7 +155,6 @@ function share() {
 
 function importFromText() {
   var dataText = document.getElementById("importCode").innerHTML;
-  console.log(dataText);
   importGraph(JSON.parse(dataText));
   reDraw();
 }
@@ -162,6 +182,16 @@ function example() {
   reDraw();
   
   configUpdate();
+}
+
+function symmetrize() {
+  var directedEdges = graph.edges.filter(e => e.pair == undefined);
+  for (var currentEdge of directedEdges) {
+      graph.removeEdge(currentEdge);
+      graph.addEdge(currentEdge.vertices[0].name, currentEdge.vertices[1].name, true);
+  }
+  
+  reDraw();
 }
 
 var processData;

@@ -30,7 +30,25 @@ function graphEditor_load() {
 var operation = "dragVertex";
 var vertexPositions = {};
 
-function outputDown(e) {
+function outputKeyDown(e) {
+  if (e.keyCode == 65) {
+    document.getElementById("addVertexButton").click();
+  }
+  if (e.keyCode == 82) {
+    document.getElementById("renameVertexButton").click();
+  }
+  if (e.keyCode == 68) {
+    document.getElementById("removeVertexButton").click();
+  }
+  if (e.keyCode == 69) {
+    document.getElementById("addEdgeButton").click();
+  }
+  if (e.keyCode == 83) {
+    document.getElementById("addSymmetricalEdgeButton").click();
+  }
+}
+
+function outputMouseDown(e) {
   if (operation == "addVertex") {
     addVertex(e);
   }
@@ -229,7 +247,7 @@ function reDraw() {
   output.setAttribute("operation", "dragVertex");
 }
 
-var groupColors = ["blue", "white", "green", "yellow", "magenta", "red"];
+var groupColors = ["blue", "white", "green", "yellow", "magenta", "red", "orange", "aqua", "purple"];
 
 function updateDraw() {
   for (var currentEdge of graph.edges) {
